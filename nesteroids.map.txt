@@ -1,0 +1,42 @@
+Modules list:
+-------------
+nesteroids.o:
+    CODE              Offs=000000  Size=002AB1  Align=00001  Fill=0000
+    RODATA            Offs=000000  Size=000100  Align=00001  Fill=0000
+    BSS               Offs=000000  Size=000424  Align=00001  Fill=0000
+    ZEROPAGE          Offs=000000  Size=000037  Align=00001  Fill=0000
+    TILES             Offs=000000  Size=002000  Align=00001  Fill=0000
+    HEADER            Offs=000000  Size=00000D  Align=00001  Fill=0000
+    OAM               Offs=000000  Size=000100  Align=00001  Fill=0000
+    VECTORS           Offs=000000  Size=000006  Align=00001  Fill=0000
+    TABLES            Offs=000000  Size=0000CB  Align=00001  Fill=0000
+
+
+Segment list:
+-------------
+Name                   Start     End    Size  Align
+----------------------------------------------------
+HEADER                000000  00000C  00000D  00001
+TILES                 000000  001FFF  002000  00001
+ZEROPAGE              000000  000036  000037  00001
+OAM                   000200  0002FF  000100  00001
+BSS                   000300  000723  000424  00001
+CODE                  008000  00AAB0  002AB1  00001
+TABLES                00E000  00E0CA  0000CB  00001
+RODATA                00E0CB  00E1CA  000100  00001
+VECTORS               00FFFA  00FFFF  000006  00001
+
+
+Exports list by name:
+---------------------
+
+
+
+Exports list by value:
+----------------------
+
+
+
+Imports list:
+-------------
+
