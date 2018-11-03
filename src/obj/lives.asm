@@ -1,6 +1,6 @@
 .segment "BSS"
     lives: .res 1
-    lives_display_change: .byte "  "
+    lives_display_change: .res 2
     lives_temp: .res 1
 .segment "CODE"
 

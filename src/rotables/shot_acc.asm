@@ -1,4 +1,4 @@
-.segment "RODATA"
+.segment "CODE"
 ; * 1.5
 
 ; fb80 = -1152  ; FCA0 = -864

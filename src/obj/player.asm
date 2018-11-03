@@ -62,9 +62,17 @@ player_invulnerable_countdown: .res 1
 .proc set_invulnerable
 
     lda player_status
+    and #%00000010
+    bne already_set
+
+    play_sfx PLAYER_READY_SOUND, PRIORITY_1
+
+    lda player_status
     ora #%00000010
     sta player_status
     set player_invulnerable_countdown, #250
+
+    already_set:
 
     rts
 .endproc
@@ -93,7 +101,15 @@ player_invulnerable_countdown: .res 1
   beq not_invulnerable
     lda player_invulnerable_countdown
     beq set_vulnerable
-    dec player_invulnerable_countdown
+
+    pha
+    lda game_screen
+    cmp PAUSE_SCREEN
+    beq no_decrement
+        dec player_invulnerable_countdown
+    no_decrement:
+    pla
+
     lsr
     lsr
     and #%00000011
@@ -287,9 +303,6 @@ degrees270to360:
 
 .proc player_respawn_check 
     ; if we're on the open screen don't respawn
-    lda open_screen_active 
-    bne player_is_alive
-
     lda #%00000001
     bit player_status 
 
@@ -356,10 +369,10 @@ degrees270to360:
 
     tax ; move this value to x to retrieve the x acceleration
 
-    lda z_acceleration_table_lo, X
+    lda x_acceleration_table_lo, X
     sta player_y_acceleration_lo
 
-    lda z_acceleration_table_hi, X
+    lda x_acceleration_table_hi, X
     sta player_y_acceleration_hi
 
     lda y_acceleration_table_lo, X
@@ -374,10 +387,23 @@ degrees270to360:
 
     ldy player_y_velocity_hi
     bpl positive_y_velocity
-        floor player_y_velocity_hi, #$fd
+;        lda #$ff
+;        sta player_y_velocity_hi
+        floor player_y_velocity_hi, #$ff
+
+        ; if carry flag is clear, value < min
+        bcs y_dont_clear_low
+            set player_y_velocity_lo, #0
+        y_dont_clear_low:
+        
         jmp positive_y_end
     positive_y_velocity:
-        ceil player_y_velocity_hi, #$03
+        ceil player_y_velocity_hi, #$01
+        ; carry is set if value >= max
+        bcc y_dont_clear_low_neg ; if the carry is clear the value < max
+            set player_y_velocity_lo, #0
+        y_dont_clear_low_neg:
+
     positive_y_end:
 
     add_16 player_x_velocity_hi, player_x_velocity_lo, \
@@ -386,11 +412,29 @@ degrees270to360:
 
     ldy player_x_velocity_hi
     bpl positive_x_velocity
-        floor player_x_velocity_hi, #$fd
+        floor player_x_velocity_hi, #$ff
+
+        ; if carry flag is clear, value < min
+        bcs dont_clear_low
+            set player_x_velocity_lo, #0
+        dont_clear_low:
+
         jmp positive_x_end
     positive_x_velocity:
-        ceil player_x_velocity_hi, #$03
+        ceil player_x_velocity_hi, #$01
+
+        ; carry is set if value >= max
+        bcc dont_clear_low_neg ; if the carry is clear the value < max
+            set player_x_velocity_lo, #0
+        dont_clear_low_neg:
+
     positive_x_end:
+
+; carry is clear if we're over the ceiling
+; .macro ceil value, max
+
+; carry is set if we hit the floor
+; .macro floor value, min
 
     rts
 .endproc

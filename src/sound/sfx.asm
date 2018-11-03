@@ -30,12 +30,16 @@
 .define EXPLODE_SOUND #1
 .define START_CLICK_SOUND #2
 .define PLAYER_READY_SOUND #3
+.define GAME_OVER_SOUND #4
+.define PAUSE_SOUND #5
 
 sounds:
 	.word player_shot
 	.word explode
 	.word start_click 
 	.word player_ready
+	.word game_over
+	.word pause_snd
 
 player_shot:
 	.byte $00,$3d
@@ -163,117 +167,251 @@ start_click:
 	.byte $ff
 
 player_ready:
-	.byte $03,$33
-	.byte $04,$a1
-	.byte $05,$02
+	.byte $03,$b1
+	.byte $04,$d4
+	.byte $05,$00
 	.byte $10
-	.byte $03,$3f
-	.byte $04,$9b
+	.byte $03,$b2
+	.byte $04,$d0
 	.byte $10
-	.byte $03,$3c
+	.byte $03,$b3
+	.byte $04,$c8
+	.byte $10
+	.byte $03,$b5
+	.byte $04,$c6
+	.byte $10
+	.byte $03,$7f
+	.byte $04,$cd
+	.byte $10
+	.byte $04,$ca
+	.byte $10
+	.byte $04,$c8
+	.byte $10
+	.byte $03,$7e
+	.byte $04,$c3
+	.byte $10
+	.byte $03,$bd
+	.byte $04,$ab
+	.byte $10
+	.byte $04,$a9
+	.byte $10
+	.byte $03,$bc
+	.byte $04,$a4
+	.byte $10
+	.byte $03,$bb
+	.byte $10
+	.byte $03,$7b
+	.byte $04,$bb
+	.byte $10
+	.byte $03,$7a
+	.byte $04,$b6
+	.byte $10
+	.byte $04,$b4
+	.byte $10
+	.byte $04,$b1
+	.byte $10
+	.byte $03,$b9
 	.byte $04,$95
 	.byte $10
-	.byte $04,$93
-	.byte $10
-	.byte $03,$3b
 	.byte $04,$90
 	.byte $10
-	.byte $04,$8e
+	.byte $04,$8d
+	.byte $11
+	.byte $03,$79
+	.byte $04,$af
+	.byte $10
+	.byte $04,$ae
+	.byte $10
+	.byte $04,$aa
+	.byte $11
+	.byte $03,$b9
+	.byte $04,$75
+	.byte $10
+	.byte $03,$b8
+	.byte $04,$73
+	.byte $10
+	.byte $04,$6e
+	.byte $10
+	.byte $04,$69
+	.byte $10
+	.byte $03,$78
+	.byte $04,$99
+	.byte $10
+	.byte $04,$94
+	.byte $10
+	.byte $04,$8f
 	.byte $10
 	.byte $04,$8c
 	.byte $10
-	.byte $04,$89
+	.byte $03,$b8
+	.byte $04,$56
 	.byte $10
-	.byte $04,$84
+	.byte $04,$53
 	.byte $10
-	.byte $04,$00
-	.byte $05,$05
+	.byte $03,$b7
+	.byte $04,$51
 	.byte $10
-	.byte $04,$fe
-	.byte $05,$04
+	.byte $03,$b6
+	.byte $04,$4e
 	.byte $10
-	.byte $04,$fd
+	.byte $03,$75
+	.byte $04,$7b
 	.byte $10
-	.byte $04,$fb
+	.byte $04,$79
+	.byte $10
+	.byte $03,$74
+	.byte $04,$78
+	.byte $10
+	.byte $03,$30
+	.byte $27
+	.byte $ff
+game_over:
+	.byte $03,$b1
+	.byte $04,$d6
+	.byte $05,$00
+	.byte $10
+	.byte $03,$b2
+	.byte $04,$d8
+	.byte $10
+	.byte $03,$b3
+	.byte $10
+	.byte $03,$b5
+	.byte $10
+	.byte $03,$7f
+	.byte $04,$e4
+	.byte $11
+	.byte $04,$e7
+	.byte $10
+	.byte $03,$7e
+	.byte $04,$e9
+	.byte $10
+	.byte $03,$bd
+	.byte $04,$d3
+	.byte $10
+	.byte $04,$d6
+	.byte $10
+	.byte $03,$bc
+	.byte $04,$d8
+	.byte $10
+	.byte $03,$bb
+	.byte $10
+	.byte $03,$7b
+	.byte $04,$f3
+	.byte $10
+	.byte $03,$7a
+	.byte $04,$f5
+	.byte $10
+	.byte $04,$fa
+	.byte $10
+	.byte $04,$fc
+	.byte $10
+	.byte $03,$b9
+	.byte $04,$e4
+	.byte $10
+	.byte $04,$e7
+	.byte $10
+	.byte $04,$e9
+	.byte $10
+	.byte $04,$ea
+	.byte $10
+	.byte $03,$79
+	.byte $04,$12
+	.byte $05,$01
+	.byte $10
+	.byte $04,$14
+	.byte $10
+	.byte $04,$19
+	.byte $10
+	.byte $04,$1a
+	.byte $10
+	.byte $03,$b9
+	.byte $04,$ed
+	.byte $05,$00
+	.byte $10
+	.byte $03,$b8
+	.byte $04,$ef
+	.byte $10
+	.byte $04,$f4
 	.byte $10
 	.byte $04,$f8
 	.byte $10
-	.byte $04,$f6
+	.byte $03,$78
+	.byte $04,$2d
+	.byte $05,$01
 	.byte $10
-	.byte $04,$f4
-	.byte $11
-	.byte $04,$f3
+	.byte $04,$30
 	.byte $10
-	.byte $04,$73
-	.byte $05,$02
-	.byte $11
-	.byte $04,$71
+	.byte $04,$35
 	.byte $10
-	.byte $04,$6c
-	.byte $11
-	.byte $04,$6a
-	.byte $11
-	.byte $04,$65
-	.byte $10
-	.byte $04,$64
-	.byte $10
-	.byte $04,$e2
-	.byte $05,$04
-	.byte $10
-	.byte $04,$e0
-	.byte $10
-	.byte $04,$dd
-	.byte $10
-	.byte $04,$d9
-	.byte $10
-	.byte $04,$db
-	.byte $10
-	.byte $04,$d9
-	.byte $10
-	.byte $04,$d8
-	.byte $12
-	.byte $04,$56
-	.byte $05,$02
-	.byte $11
-	.byte $04,$55
-	.byte $10
-	.byte $04,$51
-	.byte $11
-	.byte $04,$4f
-	.byte $10
-	.byte $04,$4e
-	.byte $10
-	.byte $04,$4c
-	.byte $10
-	.byte $04,$4a
-	.byte $10
-	.byte $04,$c7
-	.byte $05,$04
-	.byte $11
-	.byte $04,$c5
-	.byte $10
-	.byte $04,$c3
-	.byte $10
-	.byte $04,$c0
-	.byte $12
-	.byte $04,$be
-	.byte $10
-	.byte $04,$bd
-	.byte $10
-	.byte $03,$3a
-	.byte $04,$3d
-	.byte $05,$02
-	.byte $10
-	.byte $03,$39
-	.byte $04,$3b
-	.byte $10
-	.byte $03,$37
-	.byte $10
-	.byte $03,$36
-	.byte $04,$3a
-	.byte $10
-	.byte $03,$35
 	.byte $04,$39
 	.byte $10
+	.byte $03,$b8
+	.byte $04,$0c
+	.byte $10
+	.byte $04,$13
+	.byte $10
+	.byte $03,$b7
+	.byte $04,$19
+	.byte $10
+	.byte $03,$b6
+	.byte $04,$20
+	.byte $10
+	.byte $03,$75
+	.byte $04,$59
+	.byte $10
+	.byte $04,$63
+	.byte $10
+	.byte $03,$74
+	.byte $04,$68
+	.byte $10
 	.byte $03,$30
+	.byte $27
+	.byte $ff
+pause_snd:
+	.byte $00,$f3
+	.byte $01,$c9
+	.byte $02,$00
+	.byte $10
+	.byte $00,$ff
+	.byte $10
+	.byte $00,$fe
+	.byte $10
+	.byte $00,$fd
+	.byte $10
+	.byte $00,$bc
+	.byte $11
+	.byte $00,$bb
+	.byte $10
+	.byte $00,$b9
+	.byte $10
+	.byte $00,$78
+	.byte $13
+	.byte $00,$b7
+	.byte $13
+	.byte $00,$f7
+	.byte $13
+	.byte $00,$b7
+	.byte $01,$0c
+	.byte $02,$01
+	.byte $13
+	.byte $00,$77
+	.byte $13
+	.byte $00,$b7
+	.byte $10
+	.byte $00,$b6
+	.byte $10
+	.byte $00,$b5
+	.byte $10
+	.byte $00,$b4
+	.byte $10
+	.byte $00,$f3
+	.byte $10
+	.byte $00,$f2
+	.byte $10
+	.byte $00,$30
+	.byte $6b
+	.byte $01,$00
+	.byte $02,$00
+	.byte $fd
+	.byte $24
 	.byte $ff

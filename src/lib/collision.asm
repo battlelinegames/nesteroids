@@ -92,9 +92,26 @@ COLLISION_DIST = var_1
     rts
 .endproc
 
+.segment "ZEROPAGE"
+    large_asteroid_x: .res 1
+    asteroid_y_dist: .res 1
+    collision_xreg:
+.segment "CODE"
+
 ; I'M GOING TO PUT THE COLLISION RESULTS INTO A REGISTER
 .proc large_asteroid_collision_check ;  asteroid_x, asteroid_y
+/*
     lda temp_x_pos ; asteroid_x
+    sec
+    sbc scroll_x
+;    clc 
+;    adc scroll_x
+    sta var_1
+*/
+    lda temp_x_pos
+    asl
+    asl
+    asl
     sec
     sbc scroll_x
     sta var_1
@@ -102,6 +119,7 @@ COLLISION_DIST = var_1
     lda player_x_hi
     sec
     sbc var_1 
+;    sta large_asteroid_x
 
     bpl player_right
     player_left:
@@ -149,27 +167,46 @@ COLLISION_DIST = var_1
     .local @shot_up
     .local @shot_down
     .local @y_hit
-    .local @large_asteroid_collision_end
+    .local @end
+    .local @nocollision
 
+/*
     lda asteroid_x
     sec
     sbc scroll_x
     sta collision_temp_x
+*/
+    ; ------------- REMOVE THIS -----------------
+    tya
+    sta collision_xreg
+    ; ------------- REMOVE THIS -----------------
+
+    lda asteroid_x
+    asl
+    asl
+    asl
+    sec
+    sbc scroll_x
+    sta var_1
+;    sta large_asteroid_x
 
     lda shot_x
     sec
-    sbc collision_temp_x
+;    sbc large_asteroid_x
+    sbc var_1
+;    sbc collision_temp_x
+    sta large_asteroid_x
 
     bpl @shot_right
     @shot_left:
         negate_a
-        cmp #0
-        bcs @large_asteroid_collision_end ; distance >= 8
+        cmp #8
+        bcs @nocollision ; distance >= 8
         jmp @x_hit                        ; x distance is a hit
 
     @shot_right:
         cmp #34
-        bcs @large_asteroid_collision_end ; distance >= 32
+        bcs @nocollision ; distance >= 32
 
     @x_hit:
 
@@ -177,25 +214,31 @@ COLLISION_DIST = var_1
     sec
     sbc shot_y 
 
+    sta asteroid_y_dist ; REMOVE ME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
     bpl @shot_down
     ; the player is on the left side of the asteroid
     @shot_up:
         negate_a
         cmp #4
-        bcs @large_asteroid_collision_end ; distance >= 8
+        bcs @nocollision ; distance >= 8
 
         jmp @y_hit                        ; x distance is a hit
 
     ; the player is on the right side of the asteroid
     @shot_down:
         cmp #30
-        bcs @large_asteroid_collision_end ; distance >= 32
+        bcs @nocollision ; distance >= 32
 
     @y_hit:
 
     lda #0
+    jmp @end
 
-    @large_asteroid_collision_end:
+    @nocollision:
+    lda #1
+
+    @end:
 .endmacro
 
 
@@ -274,7 +317,7 @@ TEMP_X_2 = var_5
 ; look for a collision between a shot and an asteroid.  If the two collide destroy both
 .proc collision_check_sa
     ; loop over shots and loop over asteroids
-    ldy #MAX_PLAYER_SHOTS; player_shot_count
+    ldy #(MAX_PLAYER_SHOTS-1); player_shot_count
     sty temp_y_reg
     shot_loop:
         ldx #ASTEROID_COUNT ; how many asteroids in are we ===================
@@ -304,6 +347,7 @@ TEMP_X_2 = var_5
 
                 large_asteroid_collision_ps temp_x_pos, temp_y_pos, temp_shot_x, temp_shot_y
                 bne asteroid_loop
+large_asteroid_hit:
                 jsr kill_asteroid
                 jmp asteroid_loop
             not_large:

@@ -15,8 +15,9 @@ reset:
 	ldx #$FF
 	txs                 ; initialize stack
 
-    wait_for_vblank   ; utils.asm
-game_over_reset:
+;    vblank_wait:
+;    wait_for_vblank   ; utils.asm
+;    end_vblank_wait:
 
 ;    add_background_clear #0, #0, #255
 ;    add_background_clear #1, #0, #255
@@ -71,7 +72,7 @@ game_over_reset:
         sta player_x_lo
 
         jsr clear_asteroids
-
+        /*
         add_asteroid:
         create_asteroid #50, #50, #11, #1 ; xpos, ypos, rotation, size
         create_asteroid #23, #250, #7, #1 ; xpos, ypos, rotation, size
@@ -79,7 +80,8 @@ game_over_reset:
         create_asteroid #200, #160, #2, #2 ; xpos, ypos, rotation, size
         create_asteroid #25, #60, #15, #3 ; xpos, ypos, rotation, size
 
-        set size_list, #%00011010
+        set size_list, #%01011010
+        */
     ;    create_asteroid #128, #120, #0, #4 ; xpos, ypos, rotation, size
     ;   create_asteroid #98, #72, #15, #1 ; xpos, ypos, rotation, size
     done_add_asteroids:
@@ -114,11 +116,11 @@ game_over_reset:
         add_background_write #0, #98, #>score_status, #<score_status, #12
 
         add_background_write #0, #159, #>sprite0_background, #<sprite0_background, #1
-
+/*
         add_background_write #1, #$88, #>logo_background_top, #<logo_background_top, #16
         add_background_write #1, #$A8, #>logo_background_bottom, #<logo_background_bottom, #16
         add_background_write #1, #$EA, #>press_start_text, #<press_start_text, #12
-
+*/
         set PPU_CTRL, #%10010000; PPU_CTRL_NMI_ENABLE
         lda PPU_STATUS ; $2002
         set PPU_SCROLL, #0
@@ -131,9 +133,7 @@ game_over_reset:
         sta lives
 
         jsr init_open_screen
-
-        set open_screen_active, #1
-        set game_over_active, #0
+        jsr clear_score
 
         rts 
     .endproc

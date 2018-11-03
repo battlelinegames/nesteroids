@@ -46,14 +46,10 @@
 .endproc
 
 .proc sprite0_wait
-;    lda sprite0_run
-;    bne wait_end
         sprite0_loop:
             lda PPU_STATUS
             and SPRITE0_HIT
         beq sprite0_loop
 
-;        set sprite0_run, #1 ; set sprite0_run to 1
-;    wait_end:
     rts
 .endproc

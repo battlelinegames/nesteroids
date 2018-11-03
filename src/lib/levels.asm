@@ -203,16 +203,34 @@
 .endproc
 
 .proc call_create_asteroid_1
+    floor temp_x_pos, #25
+    ceil temp_x_pos, #225
+
+    floor temp_y_pos, #25
+    ceil temp_y_pos, #215
+
     create_asteroid temp_x_pos, temp_y_pos, temp_rotation, #1 ; xpos, ypos, rotation, size
     rts
 .endproc
 
 .proc call_create_asteroid_2
+    floor temp_x_pos, #25
+    ceil temp_x_pos, #225
+
+    floor temp_y_pos, #25
+    ceil temp_y_pos, #215
+
     create_asteroid temp_x_pos, temp_y_pos, temp_rotation, #2 ; xpos, ypos, rotation, size
     rts
 .endproc
 
 .proc call_create_asteroid_3
+    floor temp_x_pos, #25
+    ceil temp_x_pos, #225
+
+    floor temp_y_pos, #25
+    ceil temp_y_pos, #215
+
     create_asteroid temp_x_pos, temp_y_pos, temp_rotation, #3 ; xpos, ypos, rotation, size
     rts
 .endproc

@@ -266,7 +266,12 @@
     bne @not_largest_asteroid
         ; x register must be set to current asteroid
         setx asteroid_y_hi, xpos
-        setx asteroid_x_hi, ypos
+        ;setx asteroid_x_hi, ypos
+        lda ypos
+        sec
+        sbc #32
+        sta asteroid_x_hi, x
+
         jsr create_largest_asteroid
         lda #0
         sta asteroid_vel_y_hi, x
@@ -280,9 +285,9 @@
     ldy rotation
 
     ; get x velocity from acceleration table based on rotation
-    lda z_acceleration_table_hi, y
+    lda x_acceleration_table_hi, y
     sta asteroid_vel_y_hi, x
-    lda z_acceleration_table_lo, y
+    lda x_acceleration_table_lo, y
     sta asteroid_vel_y_lo, x
 
     lda y_acceleration_table_hi, y
@@ -558,6 +563,8 @@
         lda kill_asteroid_x
         clc
         adc scroll_x
+        sec
+        sbc #88
         sta kill_asteroid_x
 
         get_random_a

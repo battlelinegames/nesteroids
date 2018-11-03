@@ -1,11 +1,25 @@
 .segment "ZEROPAGE"
     add_next_digit: .res 1
 .segment "BSS"
-    score_base10: .byte 0, 0, 0, 0, 0, 0
-    score_display_change: .byte "      "
+    score_base10: .res 6 ; .byte 0, 0, 0, 0, 0, 0
+    score_display_change: .res 6 ;.byte "      "
 .segment "CODE"
 
 SCORE_DIGIT_COUNT = 6
+
+.proc clear_score
+    lda #0
+    ldx #SCORE_DIGIT_COUNT
+    clear_score_loop:
+        dex
+        sta score_base10, x
+    bne clear_score_loop
+
+    lda #1
+    jsr add_score_base10
+    
+    rts
+.endproc
 
 ; make sure register A is loaded with value you want to add
 ; this procedure clobbers x, y register
@@ -61,11 +75,14 @@ SCORE_DIGIT_COUNT = 6
         bne zero_loop
     non_zero:
 
+    ldy #0
+
     change_loop:
         lda score_base10, x
         clc
         adc #$30
-        sta score_display_change, x
+        sta score_display_change, y
+        iny
         inx
         cpx #SCORE_DIGIT_COUNT
     bcc change_loop

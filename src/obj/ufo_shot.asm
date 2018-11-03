@@ -42,7 +42,7 @@ ufo_shot_var_2: .res 1
 .endmacro
 
 .proc ufo_shoot 
-    play_sfx PLAYER_SHOT_SOUND, PRIORITY_1
+    play_sfx PLAYER_SHOT_SOUND, PRIORITY_2
 
     stx ufo_shot_x_reg_save
     sty ufo_shot_x_reg_save

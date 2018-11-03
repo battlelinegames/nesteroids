@@ -30,7 +30,7 @@ player_shot_index: .res 1
         rts
     can_shoot:
 
-    play_sfx PLAYER_SHOT_SOUND, PRIORITY_1
+    play_sfx PLAYER_SHOT_SOUND, PRIORITY_3
 
     lda SHOT_ALIVE_FRAMES        ; reset the shot clock
     sta player_shot_wait        ; store the shot wait time

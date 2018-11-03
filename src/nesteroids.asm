@@ -33,14 +33,19 @@
 .include "./obj/ufo.asm"
 .include "./obj/ufo_shot.asm"
 .include "./obj/teleport.asm"   ; teleport object data
+.include "./screens/screens.asm"
 .include "./obj/player.asm"     ; player object macros and procs
 .include "./lib/gamepad.asm"    ; load up the gamepad library file
 .include "./obj/player_shot.asm"      
 .include "./obj/asteroid.asm"      
 .include "./lib/collision.asm"
 .include "./def/tables.asm"     ; palettes, sprite and background tables
+
 .include "./screens/open_screen.asm"
 .include "./screens/game_over.asm"
+.include "./screens/pause.asm"
+.include "./screens/game_play.asm"
+
 .include "./obj/sprite0.asm"
 .include "./lib/levels.asm"
 
@@ -50,7 +55,7 @@
 
 .segment "ZEROPAGE"
 game_loop_y_reg_save: .res 1
-
+;game_paused: .res 1
 .segment "CODE"
 
 game_loop: ; this is a macro for the game_loop
@@ -61,13 +66,19 @@ game_loop: ; this is a macro for the game_loop
     beq game_loop
 
     set nmi_ready, #1
+
+    jsr set_gamepad     ; set the gamepad flags
+
+/*
     lda game_over_active
+    ora game_paused
     bne no_sprite0_clear
         jsr sprite0_clear_wait
     no_sprite0_clear:
-
+*/
+/*
     lda open_screen_active
-    ora game_over_active
+    ora game_paused
     bne not_open_screen_active
         jsr sprite0_wait
 
@@ -77,20 +88,12 @@ game_loop: ; this is a macro for the game_loop
         set PPU_SCROLL, #0
 
     not_open_screen_active:
+*/
 ;        set PPU_SCROLL, scroll_x
 
 
-    jsr clear_oam      ; clear out the oam ram
-    lda #0
-    sta oam_ptr
-
-    jsr set_sprite0
-
-    jsr move_asteroids ; move the asteroids
-
-    set_gamepad     ; set the gamepad flags
-
     ; should change this to use bit
+    /*
     jsr press_left
     jsr press_right
     jsr press_up
@@ -100,16 +103,45 @@ game_loop: ; this is a macro for the game_loop
     jsr press_start
     jsr press_select
 
-;    lda #0
-;    sta asteroid_ptr
-;    asteroid_loop:
-;    ldx asteroid_ptr ; you must set x before drawing the asteroid
-;    jsr asteroid_metasprite
-;    inc asteroid_ptr
-;    lda asteroid_ptr
-;    cmp asteroid_count
-;    bne asteroid_loop ; if I don't have at least one asteroid, this is going to break
+    lda game_paused ; wait until the nmi has executed
+    jmp_ne game_loop
+    */
 
+    jsr clear_oam      ; clear out the oam ram
+    lda #0
+    sta oam_ptr
+
+    lda game_screen
+    cmp OPEN_SCREEN
+    jmp_eq open_screen_loop
+
+    cmp PLAY_SCREEN
+    jmp_eq gameplay_loop
+
+    cmp PAUSE_SCREEN
+    jmp_eq pause_loop
+
+    cmp GAME_OVER_SCREEN
+    jmp_eq game_over_loop
+
+    open_screen_loop:
+        jsr open_screen_gameloop
+        jmp end_screen
+    gameplay_loop:
+        jsr gameplay_gameloop
+        jmp end_screen
+    pause_loop:
+        jsr pause_gameloop
+        jmp end_screen
+    game_over_loop:
+        jsr game_over_gameloop
+
+    end_screen:
+
+;    jsr set_sprite0
+
+;    jsr move_asteroids ; move the asteroids
+/*
     ldx #ASTEROID_COUNT
     asteroid_loop:
         dex
@@ -147,16 +179,8 @@ game_loop: ; this is a macro for the game_loop
     jsr check_level_up
 
     jsr FamiToneUpdate		;update sound
-/*
-    lda play_sound_delay
-    beq no_update_play_sound_delay
-        dec play_sound_delay
-    no_update_play_sound_delay:
 */
-    lda start_delay
-    beq dont_decrement_delay
-        dec start_delay
-    dont_decrement_delay:
+    jsr FamiToneUpdate		;update sound
 
 
     lda #0

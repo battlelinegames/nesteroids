@@ -173,27 +173,65 @@
 	sta resulthi
 .endmacro
 
+; carry is clear if we're over the ceiling
 .macro ceil value, max
     .local @below_cap
-    .ifnblank max
-        lda max
-    .endif
-    cmp value
-    bcs @below_cap
+	lda value
+
+    cmp max ; carry is set if value >= max
+    bcc @below_cap  ; branch if value < max
+		lda max
         sta value
     @below_cap:
 .endmacro
 
+; carry is set if we hit the floor
 .macro floor value, min
     .local @over_floor
-    .ifnblank min
-        lda min
-    .endif
+	/*
+	lda min
     cmp value
     bcc @over_floor
         sta value
     @over_floor:
+	*/
+	lda value
+    cmp min ; carry set if value >= min
+    bcs @over_floor
+		; if carry flag is clear, value < min
+		lda min
+        sta value
+    @over_floor:
+
 .endmacro
+
+/*
+.macro ceil_16_hi hi, lo, max_hi
+    .local @below_cap
+
+	lda max_hi
+
+    cmp hi
+    bcs @below_cap
+        sta hi
+;		lda #0
+;		sta lo
+    @below_cap:
+.endmacro
+
+.macro floor_16_hi hi, lo, min_hi
+    .local @over_floor
+
+	lda min_hi
+
+    cmp hi
+    bcc @over_floor
+        sta hi
+		lda #0
+		sta lo
+    @over_floor:
+.endmacro
+*/
 
 
 .macro jmp_on_less_than compare_value, jump_to_label
