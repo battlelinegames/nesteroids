@@ -12,6 +12,8 @@
 
 .segment "CODE"
 
+; are all the asteroids on this level destroyed?
+; if so, run the level up code
 .proc check_level_up
     ldx #(ASTEROID_COUNT-1)
 
@@ -27,6 +29,7 @@
     rts
 .endproc
 
+; all the asteroids have been destroyed so level up
 .proc level_up 
     lda player_status
     and #%00000010 ; check to see if the player is already invulnerable
@@ -202,6 +205,7 @@
     rts
 .endproc
 
+; this procedure can be optimized out.  I made this a procedure to make it easier to debug
 .proc call_create_asteroid_1
     floor temp_x_pos, #25
     ceil temp_x_pos, #225
@@ -213,6 +217,7 @@
     rts
 .endproc
 
+; this procedure can be optimized out.  I made this a procedure to make it easier to debug
 .proc call_create_asteroid_2
     floor temp_x_pos, #25
     ceil temp_x_pos, #225
@@ -224,6 +229,7 @@
     rts
 .endproc
 
+; this procedure can be optimized out.  I made this a procedure to make it easier to debug
 .proc call_create_asteroid_3
     floor temp_x_pos, #25
     ceil temp_x_pos, #225
@@ -235,16 +241,8 @@
     rts
 .endproc
 
+; this procedure can be optimized out.  I made this a procedure to make it easier to debug
 .proc call_create_asteroid_4
     create_asteroid temp_x_pos, temp_y_pos, temp_rotation, #4 ; xpos, ypos, rotation, size
     rts
 .endproc
-
-/*
-        create_asteroid #23, #250, #7, #2 ; xpos, ypos, rotation, size
-        create_asteroid #50, #50, #11, #1 ; xpos, ypos, rotation, size
-        create_asteroid #150, #25, #6, #2 ; xpos, ypos, rotation, size
-        create_asteroid #200, #160, #2, #2 ; xpos, ypos, rotation, size
-        create_asteroid #25, #60, #15, #3 ; xpos, ypos, rotation, size
-
-*/

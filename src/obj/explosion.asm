@@ -11,22 +11,22 @@ explosion_frame: .res EXPLOSION_COUNT
 explosion_ptr: .res 1
 
 .segment "CODE"
+
+; set the frames in all of the explosion animations to $ff
 .proc reset_explosion_frames 
     ldx #EXPLOSION_COUNT
     lda #$ff ; #(MAX_EXPLOSION_FRAME <<FRAME_SHIFT)
     dex
     frame_loop:
-;        php ; save off the dex status so I can branch on not equal
-
         sta explosion_frame, x
         sta explosion_x, x
 
-;        plp
         dex
     bpl frame_loop
     rts
 .endproc
 
+; run an explosion animation at the x, y coordinates provided
 .macro create_explosion x_pos, y_pos
     .local @no_reset_y
     play_sfx EXPLODE_SOUND, PRIORITY_1
@@ -48,6 +48,7 @@ explosion_ptr: .res 1
 
 ; SAVE_X_REG = var_5 
 
+; change the frame in the explosion animations
 .proc move_explosions
     ldx #(EXPLOSION_COUNT-1)
 

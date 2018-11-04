@@ -12,6 +12,7 @@
     inx
 .endmacro
 
+; set a value for var, x to the value of from
 .macro setx var, from
     lda from
     sta var, X
@@ -59,6 +60,7 @@
         bne @loop
 .endmacro
 
+; absolute value.  If a clobber flag is passed in, we will clobber the y register
 .macro abs_a clobber
 	.local @negative
 	.local @positive
@@ -89,6 +91,7 @@
 @skip_jump:
 .endmacro
 
+; if bcc doesn't work becuase it needs to jump too far.
 .macro jmp_cc jump_to_label
 	.local @skip_jump
 	bcs @skip_jump
@@ -96,6 +99,7 @@
 @skip_jump:
 .endmacro
 
+; if bcs doesn't work becuase it needs to jump too far.
 .macro jmp_cs jump_to_label
 	.local @skip_jump
 	bcc @skip_jump
@@ -103,6 +107,7 @@
 @skip_jump:
 .endmacro
 
+; if bne doesn't work becuase it needs to jump too far.
 .macro jmp_ne jump_to_label
 	.local @skip_jump
 	beq @skip_jump
@@ -110,6 +115,7 @@
 @skip_jump:
 .endmacro
 
+; if bmi doesn't work becuase it needs to jump too far.
 .macro jmp_mi jump_to_label
 	.local @skip_jump
 	bpl @skip_jump
@@ -117,6 +123,7 @@
 @skip_jump:
 .endmacro
 
+; if bpl doesn't work becuase it needs to jump too far.
 .macro jmp_pl jump_to_label
 	.local @skip_jump
 	bmi @skip_jump
@@ -131,6 +138,7 @@
 	adc #1
 .endmacro
 
+; add 2 values and store in result
 .macro add val_1, val_2, result
     lda val_1
     clc
@@ -138,6 +146,7 @@
     sta result
 .endmacro
 
+; 16 bit addition
 .macro add_16 high1, low1, high2, low2, resulthi, resultlow
 	.local @no_carry
 	clc
@@ -149,6 +158,7 @@
 	sta resulthi
 .endmacro
 
+; 16 bit addition using x as an index
 .macro xadd_16 high1, low1, high2, low2, resulthi, resultlow
 	.local @no_carry
 	clc
@@ -160,7 +170,7 @@
 	sta resulthi, x
 .endmacro
 
-
+; 16 bit subtraction
 .macro sub_16 high1, low1, high2, low2, resulthi, resultlow
 	.local @carry_set
 	lda low1
@@ -188,13 +198,6 @@
 ; carry is set if we hit the floor
 .macro floor value, min
     .local @over_floor
-	/*
-	lda min
-    cmp value
-    bcc @over_floor
-        sta value
-    @over_floor:
-	*/
 	lda value
     cmp min ; carry set if value >= min
     bcs @over_floor
@@ -204,34 +207,6 @@
     @over_floor:
 
 .endmacro
-
-/*
-.macro ceil_16_hi hi, lo, max_hi
-    .local @below_cap
-
-	lda max_hi
-
-    cmp hi
-    bcs @below_cap
-        sta hi
-;		lda #0
-;		sta lo
-    @below_cap:
-.endmacro
-
-.macro floor_16_hi hi, lo, min_hi
-    .local @over_floor
-
-	lda min_hi
-
-    cmp hi
-    bcc @over_floor
-        sta hi
-		lda #0
-		sta lo
-    @over_floor:
-.endmacro
-*/
 
 
 .macro jmp_on_less_than compare_value, jump_to_label
@@ -258,7 +233,7 @@
 ; .endmacro
 .endmacro
 
-
+; clear the entire background on a vblank
 .proc clear_background_all
 		wait_for_vblank
 

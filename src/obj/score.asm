@@ -7,6 +7,7 @@
 
 SCORE_DIGIT_COUNT = 6
 
+; clear the player's score and the score board
 .proc clear_score
     lda #0
     ldx #SCORE_DIGIT_COUNT
@@ -55,6 +56,7 @@ SCORE_DIGIT_COUNT = 6
     rts
 .endproc
 
+; change the display to the current score
 .proc change_score_display
     ; first clear display change
     lda #' '

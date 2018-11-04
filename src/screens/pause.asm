@@ -1,10 +1,10 @@
 
-
+; we don't really need to do anything to initialize pause, but I'm defining it here anyway
 .proc pause_init
-
     rts
 .endproc
 
+; this is what to run on the gameloop when the game is on the pause screen
 .proc pause_gameloop
     bne no_sprite0_clear
         jsr sprite0_clear_wait
@@ -38,11 +38,13 @@
     rts
 .endproc
 
+; look for input from the controller while the game is paused
 .proc pause_input
     jsr pause_press_start
     rts
 .endproc
 
+; do what needs to be done when the player presses the start button on the game screen
 .proc pause_press_start
     lda start_delay
     bne decrement_delay
@@ -67,6 +69,7 @@
     rts
 .endproc
 
+; this is what we do on the nmi during the game loop
 .proc render_pause
     jsr render_gameplay
     rts

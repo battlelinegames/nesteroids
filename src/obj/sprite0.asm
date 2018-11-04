@@ -1,5 +1,6 @@
 .segment "CODE"
 
+; render the sprite 0
 .proc set_sprite0
     render_sprite #31, #248, #0, #0
     rts

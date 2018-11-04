@@ -4,6 +4,7 @@
     game_over_x_reg_save: .res 1
 .segment "CODE"
 
+; initialize the game over screen
 .proc game_over_screen_init
     play_sfx GAME_OVER_SOUND, PRIORITY_1
 
@@ -42,20 +43,13 @@
     rts
 .endproc
 
+; input for the game over screen
 .proc gameover_input
     jsr gameover_press_start
-    /*
-    jsr gameover_press_left
-    jsr gameover_press_right
-    jsr gameover_press_up
-    jsr gameover_press_down
-    jsr gameover_press_a
-    jsr gameover_press_b
-    jsr gameover_press_select
-    */
     rts
 .endproc
 
+; when the player presses start on the gameover screen
 .proc gameover_press_start
     lda start_delay
     bne decrement_delay
@@ -79,6 +73,7 @@
     rts
 .endproc
 
+; nmi code for the game over screen
 .proc render_game_over
     lda PPU_STATUS ; $2002
 
@@ -90,6 +85,7 @@
     rts
 .endproc
 
+; game loop for game over screen
 .proc game_over_gameloop
     jsr gameover_input
     rts

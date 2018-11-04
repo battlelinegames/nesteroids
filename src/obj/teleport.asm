@@ -14,6 +14,8 @@ TELEPORT_OUT_FLAG = %00000100
 TELEPORT_IN_FLAG  = %00001000
 
 .segment "CODE"
+
+; teleport the player to a different location
 .proc teleport_player
     lda teleport_delay
     bne dont_teleport  ; if teleport delay is != 0, we can't teleport
@@ -27,6 +29,7 @@ TELEPORT_IN_FLAG  = %00001000
     rts
 .endproc
 
+; check to see if the player is allowed to teleport
 .macro teleport_render_player_check skip_render_label
     .local @not_teleporting
     .local @not_hidden
@@ -50,8 +53,8 @@ TELEPORT_IN_FLAG  = %00001000
     @not_teleporting:
 .endmacro
 
+; run the teleport frame changes in the game loop
 .proc move_teleport
-    
     ; first thing we need to do is decrement the teleport delay
     ; this delay prevents the user from teleporting multiple times
     ; without a break

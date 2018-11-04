@@ -100,14 +100,6 @@ COLLISION_DIST = var_1
 
 ; I'M GOING TO PUT THE COLLISION RESULTS INTO A REGISTER
 .proc large_asteroid_collision_check ;  asteroid_x, asteroid_y
-/*
-    lda temp_x_pos ; asteroid_x
-    sec
-    sbc scroll_x
-;    clc 
-;    adc scroll_x
-    sta var_1
-*/
     lda temp_x_pos
     asl
     asl
@@ -160,6 +152,7 @@ COLLISION_DIST = var_1
     rts
 .endproc
 
+; check to see if a large asteroid has collided with a player shot
 .macro large_asteroid_collision_ps asteroid_x, asteroid_y, shot_x, shot_y
     .local @shot_left
     .local @shot_right
@@ -170,17 +163,6 @@ COLLISION_DIST = var_1
     .local @end
     .local @nocollision
 
-/*
-    lda asteroid_x
-    sec
-    sbc scroll_x
-    sta collision_temp_x
-*/
-    ; ------------- REMOVE THIS -----------------
-    tya
-    sta collision_xreg
-    ; ------------- REMOVE THIS -----------------
-
     lda asteroid_x
     asl
     asl
@@ -188,14 +170,10 @@ COLLISION_DIST = var_1
     sec
     sbc scroll_x
     sta var_1
-;    sta large_asteroid_x
 
     lda shot_x
     sec
-;    sbc large_asteroid_x
     sbc var_1
-;    sbc collision_temp_x
-    sta large_asteroid_x
 
     bpl @shot_right
     @shot_left:
@@ -213,8 +191,6 @@ COLLISION_DIST = var_1
     lda asteroid_y
     sec
     sbc shot_y 
-
-    sta asteroid_y_dist ; REMOVE ME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     bpl @shot_down
     ; the player is on the left side of the asteroid
@@ -263,7 +239,6 @@ COLLISION_DIST = var_1
             lda asteroid_x_hi, x
             sta temp_x_pos
 
-;            large_asteroid_collision_check temp_y_pos, temp_x_pos
             jsr large_asteroid_collision_check
             cmp #0
             beq hit_player
@@ -347,7 +322,9 @@ TEMP_X_2 = var_5
 
                 large_asteroid_collision_ps temp_x_pos, temp_y_pos, temp_shot_x, temp_shot_y
                 bne asteroid_loop
-large_asteroid_hit:
+
+                large_asteroid_hit:
+                
                 jsr kill_asteroid
                 jmp asteroid_loop
             not_large:

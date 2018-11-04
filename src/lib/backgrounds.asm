@@ -44,6 +44,7 @@
 .endproc
 
 BACKGROUND_RENDER_COUNT = 32
+
 .segment "BSS"
     nametable_reg_x: .res 1
     nametable_reg_y: .res 1
@@ -77,6 +78,7 @@ BACKGROUND_RENDER_COUNT = 32
 
 MAX_TILE_RENDERS = 40
 
+; clear background procedure runs during the nmi
 ; clobbering both x and y with this.  may need to save off those values if it's a problem
 .proc clear_background
     set tile_render_count, #0
@@ -133,6 +135,7 @@ MAX_TILE_RENDERS = 40
     rts
 .endproc
 
+; update background procedure runs during the nmi
 ; clobbers all registers
 .proc update_background
     update_entry_loop:
@@ -194,7 +197,8 @@ MAX_TILE_RENDERS = 40
     rts
 .endproc
 
-
+; during the game loop, this macro adds a request to clear
+; part of the background to the background clear queue
 .macro add_background_clear ppu_hi, ppu_lo, run_len
     
     ldx clear_write_ptr
@@ -213,6 +217,8 @@ MAX_TILE_RENDERS = 40
 
 .endmacro
 
+; during the game loop, this macro adds a request to write to the bakcground
+; part of the background to the background write queue
 .macro add_background_write ppu_hi, ppu_lo, data_hi, data_lo, run_len
     ldx bg_write_ptr
 
@@ -230,6 +236,7 @@ MAX_TILE_RENDERS = 40
     sta bg_write_ptr
 .endmacro
 
+; this loads up the background for the open screen
 .proc load_open_screen
     ldx bg_write_ptr
 
@@ -270,7 +277,8 @@ MAX_TILE_RENDERS = 40
     sta bg_write_ptr
     rts
 .endproc
-              
+
+; this loads up the background attribute table
 .proc load_attribute 
     lda PPU_STATUS        ; read PPU status to reset the high/low latch
     lda #$23    ; 27 ; 2B ; 2F

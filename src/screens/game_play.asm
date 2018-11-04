@@ -1,9 +1,10 @@
+; initialize gameplay screen
 .proc gameplay_init
-
     jsr set_sprite0
     rts 
 .endproc
 
+; input buttons used by the gameplay screen
 .proc gameplay_input
     jsr gameplay_press_left
     jsr gameplay_press_right
@@ -17,6 +18,7 @@
     rts
 .endproc
 
+; press the a button on the gameplay screen
 .proc gameplay_press_a
     lda PRESS_A
     and gamepad_press
@@ -35,6 +37,7 @@
     rts
 .endproc
 
+; press the b button on the gameplay screen
 .proc gameplay_press_b
     lda PRESS_B
     and gamepad_press
@@ -52,6 +55,7 @@
     rts
 .endproc
 
+; press the start button on the gameplay screen
 .proc gameplay_press_start
     lda start_delay
     bne decrement_delay
@@ -79,8 +83,7 @@
     rts
 .endproc
 
-; should change these to use bit
-
+; press the up button on the gameplay screen
 .proc gameplay_press_up
     lda PRESS_UP       ; load PRESS UP flag into A register
     and gamepad_press   ; and this with gamepad_press
@@ -95,6 +98,7 @@
     rts
 .endproc
 
+; press the left button on the gameplay screen
 .proc gameplay_press_left
     lda PRESS_LEFT
     and gamepad_press
@@ -110,6 +114,7 @@
     rts
 .endproc
 
+; press the right button on the gameplay screen
 .proc gameplay_press_right
     lda PRESS_RIGHT
     and gamepad_press
@@ -125,7 +130,7 @@
     rts
 .endproc
 
-
+; gameloop code for gameplay screen
 .proc gameplay_gameloop
     bne no_sprite0_clear
         jsr sprite0_clear_wait
@@ -183,6 +188,7 @@
     rts
 .endproc
 
+; code called on the gameplay screen during the nmi
 .proc render_gameplay
     lda PPU_STATUS ; $2002
 
@@ -194,34 +200,3 @@
 
     rts
 .endproc
-
-/*
-.proc gameplay_press_down
-    lda PRESS_DOWN
-    and gamepad_press
-    beq no_press_down     ; if the result is 0, the gamepad is not pressed
-        advance_random_ptr ; advance the random pointer based on the frame
-        ; press down on directional pad
-        jmp press_down_end
-    no_press_down:
-        ; not pressing down on directional pad
-    press_down_end:
-    rts
-.endproc
-*/
-
-/*
-.proc gameplay_press_select
-    lda PRESS_SELECT
-    and gamepad_press
-    beq skip_press_select
-        advance_random_ptr ; advance the random pointer based on the frame
-        ; THE SELECT BUTTON IS PRESSED
-        ; select button action
-        jmp select_end
-    skip_press_select:
-        ; if the select is not pressed
-    select_end:
-    rts
-.endproc
-*/

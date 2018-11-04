@@ -21,6 +21,7 @@ ufo_reg_y: .res 1
 .segment "CODE"
 
 
+; at the beginning of the level set a timer to launch the ufo
 .proc init_ufo_level_timer
     lda #UFO_SPAWN_BASE_TIME
 
@@ -73,6 +74,7 @@ ufo_reg_y: .res 1
     rts
 .endproc
 
+; move the ufo position inside the game loop
 .proc move_ufo
     lda ufo_active
     beq end
@@ -117,6 +119,7 @@ ufo_reg_y: .res 1
     rts
 .endproc
 
+; destroy the ufo
 .proc kill_ufo
     lda ufo_active
     bne ufo_alive

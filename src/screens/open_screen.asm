@@ -12,8 +12,7 @@ open_screen_nametable:
 .byte $60,$61,$62,$63,$64,$65,$66,$67,$68,$69,$6a,$6b,$6c,$6d,$6e,$6f
 .byte $70,$71,$72,$73,$74,$75,$76,$77,$78,$79,$7a,$7b,$7c,$7d,$7e,$7f
 
-
-
+; run during the gameloop on the open screen
 .proc open_screen_gameloop
     jsr set_sprite0
 
@@ -22,6 +21,7 @@ open_screen_nametable:
     rts
 .endproc
 
+; initialize the open screen
 .proc init_open_screen
     add_background_write #1, #$88, #>logo_background_top, #<logo_background_top, #16
     add_background_write #1, #$A8, #>logo_background_bottom, #<logo_background_bottom, #16
@@ -33,6 +33,7 @@ open_screen_nametable:
     rts
 .endproc
 
+; start the game 
 .proc start_game
 
     add_background_clear #1, #$88, #16
@@ -48,7 +49,7 @@ open_screen_nametable:
     create_asteroid #25, #60, #15, #3 ; xpos, ypos, rotation, size
 
     jsr init_ufo_level_timer
-    
+
     set size_list, #%00011010
 
     lda #1
@@ -69,6 +70,7 @@ open_screen_nametable:
     rts
 .endproc
 
+; clear the logo on the open screen
 .proc clear_logo
     clear_loop:
 
@@ -90,6 +92,7 @@ open_screen_nametable:
     rts
 .endproc
 
+; open screen code to run during the nmi
 .proc render_open_screen
     lda scroll_y
     cmp #32
@@ -111,41 +114,13 @@ open_screen_nametable:
     rts
 .endproc
 
-
+; look for input on the open screen
 .proc open_input
     jsr open_press_start
-    /*
-    jsr gameover_press_left
-    jsr gameover_press_right
-    jsr gameover_press_up
-    jsr gameover_press_down
-    jsr gameover_press_a
-    jsr gameover_press_b
-    jsr gameover_press_select
-    */
     rts
 .endproc
-/*
-.proc open_press_start
-    lda PRESS_START
-    and gamepad_press
-    beq start_end
-        advance_random_ptr ; advance the random pointer based on the frame
 
-        set game_screen, PLAY_SCREEN
-        jsr start_game
-
-        lda #30
-        sta start_delay
-
-        jmp start_end
-
-        ; if the start is not pressed
-    start_end:
-    rts
-.endproc
-*/
-
+; press the start button on the open screen
 .proc open_press_start
     lda start_delay
     bne decrement_delay

@@ -27,6 +27,7 @@ PRIORITY_SPRITE = %00100000 ; OAM BIT FLAG PRIORITY
     rts
 .endproc
 
+; clear oam memory
 .proc clear_oam
   lda #$ff      ; setting y value in oam to #$ff will prevent it from rendering
   ldx #0
@@ -107,16 +108,3 @@ SIZE_3_ROT_FRAMES = 64 ; starting rotated frame position of smallest asteroid
 .define TEMP_FRAME var_5
 .define TEMP_FLAGS var_4
 
-;.macro palette_setup start 
-;  LDA PPU_STATUS    ; $2002 read PPU status to reset the high/low latch to high
-;  LDA #$3F
-;  STA PPU_ADDR      ; $2006 write the high byte of $3F10 address
-;  LDA start         ; this was the parameter passed in
-;  STA PPU_ADDR      ; $2006 write the low byte of $3F10 address
-;.endmacro
-
-; this macro sets the full palette data on the ppu
-;.macro set_palette
-;  palette_setup #$00
-;  write_data_to_register palette_background, PPU_DATA, 32 ; $2007 macro_utils.asm
-;.endmacro

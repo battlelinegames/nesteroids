@@ -65,6 +65,7 @@
 ; asteroid_vel_x_hi: .res ASTEROID_COUNT
 ;===============================================
 
+; loop through the asteroids and move them
 .proc move_asteroids
     ldx #ASTEROID_COUNT
     asteroid_loop: 
@@ -88,7 +89,7 @@
     rts
 .endproc
 
-
+; find an asteroid in memory that is not currently being used
 .proc find_open_asteroid_x
     ldx #0
 
@@ -103,6 +104,7 @@
     rts
 .endproc
 
+; create a large asteroid that uses the background to render instead of a sprite
 .macro largest_asteroid_setup lo, hi, index
     .local @no_carry
     .local @no_carry_2
@@ -155,8 +157,10 @@
     ; THIS WON'T WORK BECAUSE THE VALUE WILL BE GREATER THAN 256
 .endmacro
 
+; clear the background tiles you used to render the large asteroids
+; this needs to be called 4 times per asteroid because it only
+; clears a single row of the asteroid
 .macro clear_large_asteroid lo, hi
-;        add_background_clear ppu_hi, ppu_lo, run_len
 
         add_background_clear hi, lo, #4
 
@@ -174,6 +178,8 @@
 
 .endmacro
 
+; the large asteroid is made out of background tiles.  Change them back
+; to blank tiles
 .proc hide_large_asteroid
     cpx large_asteroid_1_index
     beq asteroid_slot_1
@@ -202,6 +208,7 @@
     rts
 .endproc
 
+; the large asteroids are set up as background tiles.
 .proc create_largest_asteroid
     ; make sure the x register is pointed at the right asteroid
     lda large_asteroid_1_lo
@@ -240,8 +247,8 @@
     rts
 .endproc
 
+; create an asteroid new asteroid
 .macro create_asteroid ypos, xpos, rotation, size
- ;   .local @skip_reset_count
     .local @shift_loop
     .local @end_create_asteroid
     .local @not_largest_asteroid
@@ -314,14 +321,6 @@
     bne @shift_loop ; perform loop 5-size number of times
 
     @end_create_asteroid:
-;    inx
-;    cpx #ASTEROID_COUNT
-;    bne @skip_reset_count
-;        ldx #0
-;    @skip_reset_count:
-;    stx asteroid_count
-
-; end create_asteroid macro
 .endmacro
 
 ; asteroid_metasprite uses the x register to render an asteroid metasprite
@@ -640,6 +639,7 @@
     rts
 .endproc
 
+; set the asteroid size to all asteroids to 0.  This makes them not render
 .proc clear_asteroids
     ldx #ASTEROID_COUNT
     lda #0

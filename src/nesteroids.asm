@@ -1,4 +1,3 @@
-; DEBUG = 1 ; if DEBUG flag exists debug is on.  comment this line out to turn it off
 .linecont       +               ; Allow line continuations
 .feature        c_comments
 
@@ -55,12 +54,10 @@
 
 .segment "ZEROPAGE"
 game_loop_y_reg_save: .res 1
-;game_paused: .res 1
+
 .segment "CODE"
 
 game_loop: ; this is a macro for the game_loop
-;    lda oam_ptr
-;    beq game_loop
 
     lda nmi_executed ; wait until the nmi has executed
     beq game_loop
@@ -68,44 +65,6 @@ game_loop: ; this is a macro for the game_loop
     set nmi_ready, #1
 
     jsr set_gamepad     ; set the gamepad flags
-
-/*
-    lda game_over_active
-    ora game_paused
-    bne no_sprite0_clear
-        jsr sprite0_clear_wait
-    no_sprite0_clear:
-*/
-/*
-    lda open_screen_active
-    ora game_paused
-    bne not_open_screen_active
-        jsr sprite0_wait
-
-        set PPU_CTRL, #%10010000; PPU_CTRL_NMI_ENABLE
-        lda PPU_STATUS ; $2002
-        set PPU_SCROLL, scroll_x
-        set PPU_SCROLL, #0
-
-    not_open_screen_active:
-*/
-;        set PPU_SCROLL, scroll_x
-
-
-    ; should change this to use bit
-    /*
-    jsr press_left
-    jsr press_right
-    jsr press_up
-    jsr press_down
-    jsr press_a
-    jsr press_b
-    jsr press_start
-    jsr press_select
-
-    lda game_paused ; wait until the nmi has executed
-    jmp_ne game_loop
-    */
 
     jsr clear_oam      ; clear out the oam ram
     lda #0
@@ -138,54 +97,10 @@ game_loop: ; this is a macro for the game_loop
 
     end_screen:
 
-;    jsr set_sprite0
-
-;    jsr move_asteroids ; move the asteroids
-/*
-    ldx #ASTEROID_COUNT
-    asteroid_loop:
-        dex
-        bmi asteroid_loop_end
-        lda asteroid_size, x
-        beq asteroid_loop
-        stx game_loop_y_reg_save
-        jsr asteroid_metasprite
-        ldx game_loop_y_reg_save
-        jmp asteroid_loop ; if I don't have at least one asteroid, this is going to break
-
-    asteroid_loop_end:
-    dec scroll_x
-
-    jsr move_explosions
-    jsr move_teleport
-    jsr move_player_shots
-    jsr player_metasprite
-
-
-    ; check for collisions between the asteroids and the player
-    jsr collision_check_pa
-    ; check for collisions between the asteroids and the player's shots
-    jsr collision_check_sa
-    jsr collision_check_up
-    jsr collision_check_usp
-    jsr collision_check_spu
-
-    jsr player_respawn_check
-
-    jsr create_ufo
-    jsr move_ufo
-    jsr move_ufo_shots
-
-    jsr check_level_up
-
     jsr FamiToneUpdate		;update sound
-*/
-    jsr FamiToneUpdate		;update sound
-
 
     lda #0
-;    sta PPU_SCROLL
-;    sta PPU_SCROLL
+
     sta nmi_executed    ; clear the nmi_executed flag so we wait for the next vblank
     set nmi_ready, #0
 

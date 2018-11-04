@@ -23,6 +23,7 @@ player_shot_index: .res 1
 
 .segment "CODE"
 
+; player shoots projectile
 .proc player_shoot 
     lda player_shot_wait        ; ===> BEGINNING OF PLAYER SHOOT
     beq can_shoot              ; we can shoot if the player_shot wait is 0
@@ -83,6 +84,7 @@ player_shot_index: .res 1
 
 PLAYER_SHOT_PALETTE = 1
 
+; move the position of the player shots
 .proc move_player_shots
     ldx #0
     @shot_loop: ; ===>>> SHOT LOOP

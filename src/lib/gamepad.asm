@@ -44,6 +44,7 @@ gamepad_init_begin:
 gamepad_init_end:
 .endmacro
 
+; use this macro to figure out if a specific button was pressed
 .macro button_press_check button
     .local @not_pressed
     lda GAMEPAD_REGISTER

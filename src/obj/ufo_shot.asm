@@ -24,8 +24,7 @@ ufo_shot_var_2: .res 1
 
 .segment "CODE"
 
-
-;; !!! THIS IS NOT WORKING!!!!!!!!
+; find an unused ufo shot in the ufo shot pool
 .macro find_ufo_shot_x no_shot_label
     .local @shot_loop
     .local @found_shot
@@ -41,6 +40,7 @@ ufo_shot_var_2: .res 1
     @found_shot:
 .endmacro
 
+; have the ufo shoot
 .proc ufo_shoot 
     play_sfx PLAYER_SHOT_SOUND, PRIORITY_2
 
@@ -86,6 +86,7 @@ ufo_shot_var_2: .res 1
     rts
 .endproc
 
+; move the ufo shots in the game loop
 .proc move_ufo_shots
     ldx #0
     shot_loop: ; ===>>> SHOT LOOP

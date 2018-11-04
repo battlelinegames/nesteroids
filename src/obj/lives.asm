@@ -4,12 +4,14 @@
     lives_temp: .res 1
 .segment "CODE"
 
+; decrement the number of lives then change the status board
 .proc decrement_lives
     dec lives
     jsr reset_lives_label
     rts
 .endproc
 
+; increment the number of lives then change the status board
 .proc increment_lives
     inc lives
     jsr reset_lives_label
@@ -25,7 +27,7 @@
     rts
 .endproc
 
-
+; changes the background tiles in the status bar to represent the lives the player has
 .proc reset_lives_label
     lda #0
     sta lives_temp

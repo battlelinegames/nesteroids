@@ -1,10 +1,12 @@
 .segment "TABLES"
+
 palette_background:
 .byte $0F,$38,$17,$07 ; logo
 .byte $0F,$09,$19,$29 ; bg1 green
 .byte $0F,$01,$11,$21 ; bg2 blue
 .byte $0F,$00,$10,$30 ; bg3 greyscale
 ;.byte $0F,$18,$28,$38 ; sp0 yellow
+
 palette_sprites:
 .byte $0F,$38,$27,$17 ; asteroid colors
 .byte $0F,$14,$24,$34 ; player shot palette

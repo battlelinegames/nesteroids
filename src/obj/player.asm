@@ -44,14 +44,7 @@ player_invulnerable_countdown: .res 1
 
 .segment "CODE"
 
-; add this when you refactor
-.macro branch_player_alive label
-    ; player_alive check
-    lda #1
-    bit player_status
-    bne label
-.endmacro
-
+; jump to label if the player is dead
 .macro branch_player_dead label
     ; player_alive check
     lda #1
@@ -59,6 +52,7 @@ player_invulnerable_countdown: .res 1
     beq label
 .endmacro
 
+; set the player's status to invulnerable
 .proc set_invulnerable
 
     lda player_status
@@ -77,6 +71,7 @@ player_invulnerable_countdown: .res 1
     rts
 .endproc
 
+; move the player's position during the gameloop
 .proc move_player
     add_16 player_y_hi, player_y_lo, \
             player_y_velocity_hi, player_y_velocity_lo, \
@@ -88,9 +83,8 @@ player_invulnerable_countdown: .res 1
     rts
 .endproc
 
-
+; this render's the player inside the nmi
 .proc player_metasprite
-
   lda #%00000001        ; bit 0 in status flag is alive
   bit player_status     ; test the alive bit and don't render if the player is dead
   
@@ -257,18 +251,21 @@ degrees270to360:
     rts
 .endproc
 
+; modify the player's rotation turning it to the left
 .proc turn_left
     dec player_rotation
     dec player_rotation
     rts
 .endproc
   
+; modify the player's rotation turning it to the right
 .proc turn_right
     inc player_rotation
     inc player_rotation
     rts
 .endproc
 
+; if the player isn't invulnerable, destroy the player's ship and reduce number of lives
 .proc kill_player
 ;======================================================================================
 ; PLAYER STATUS FLAGS
@@ -301,6 +298,7 @@ degrees270to360:
     rts
 .endproc
 
+; check to see if the player has enough lives to respawn
 .proc player_respawn_check 
     ; if we're on the open screen don't respawn
     lda #%00000001
@@ -330,6 +328,7 @@ degrees270to360:
     rts
 .endproc
 
+; clear the player's rotation and velocity
 .proc clear_player_stats
     lda #0
     sta player_rotation
@@ -357,6 +356,7 @@ degrees270to360:
     rts
 .endproc
 
+; accelerate the player in the direction he's pointing
 .proc accelerate_player
     ; player velocity x and y should be less than $10 or greater than $F0
     lda player_rotation ; load player rotation

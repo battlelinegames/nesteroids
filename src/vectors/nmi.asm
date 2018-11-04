@@ -30,41 +30,9 @@ nmi:
     ; call the oam dma with a macro
     jsr oam_dma
 
+    ; we need to figure out what screen we're on and run the nmi call for that screen
     jsr clear_background
     jsr update_background
-
-/*
-    lda open_screen_active
-    beq not_open_screen
-        jsr render_open_screen
-    not_open_screen:
-
-    lda run_start_game
-    beq not_start_game
-        lda #0
-        sta run_start_game
-    not_start_game:
-
-    jsr clear_background
-    jsr update_background
-
-    lda open_screen_active
-    bne open_screen
-    game_screen:
-;       inc scroll_x
-;       inc scroll_y
-        set PPU_CTRL, #%10010000; PPU_CTRL_NMI_ENABLE
-        lda PPU_STATUS ; $2002
-
-        set PPU_SCROLL, #0 ; scroll_x
-        sta PPU_SCROLL ; , #0
-;        sta sprite0_run     ; reset sprite0_run
-        jmp end_screens
-    open_screen:
-        set PPU_SCROLL, #0
-        set PPU_SCROLL, scroll_y
-    end_screens:
-*/
     lda game_screen
     cmp OPEN_SCREEN
     beq open_screen_nmi

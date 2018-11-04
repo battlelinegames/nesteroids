@@ -15,15 +15,6 @@ reset:
 	ldx #$FF
 	txs                 ; initialize stack
 
-;    vblank_wait:
-;    wait_for_vblank   ; utils.asm
-;    end_vblank_wait:
-
-;    add_background_clear #0, #0, #255
-;    add_background_clear #1, #0, #255
-;    add_background_clear #2, #0, #255
-;    add_background_clear #3, #0, #255
-
     ; execute this code during first vblank after reset
 
     ; clear out all the ram by setting everything to 0
